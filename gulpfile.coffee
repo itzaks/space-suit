@@ -67,7 +67,7 @@ gulp.task 'watch', ->
   gulp.watch('src/**/*.jade', ['templates', reload])
   gulp.watch('src/css/**/*.styl', ['styles'])
 
-gulp.task 'clean', (cb) -> del ['build', 'bin']; cb()
+gulp.task 'clean', (cb) -> del ['build', 'bin'], cb
 gulp.task 'bower', ['bower_js', 'bower_css']
 gulp.task 'server', -> browsersync(server: 'bin/', notify: no)
 gulp.task 'client', ['bower', 'scripts', 'templates', 'styles']
