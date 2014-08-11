@@ -32,6 +32,7 @@
     "lazypipe": "~0.2.2",
     "gulp-plumber": "~0.6.4",
     "coffee-script": "~1.7.1",
-    "gulp-notify": "~1.4.2"
+    "gulp-notify": "~1.4.2",
+    "main-bower-files": "~1.0.2",
   }
 }
