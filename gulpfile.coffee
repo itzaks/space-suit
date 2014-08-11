@@ -8,6 +8,7 @@ browserify             = require 'gulp-browserify'
 sourcemaps             = require 'gulp-sourcemaps'
 jade                   = require 'gulp-jade'
 plumber                = require 'gulp-plumber'
+bower                  = require 'main-bower-files'
 lazypipe               = require 'lazypipe'
 nib                    = require 'nib'
 jeet                   = require 'jeet'
@@ -45,6 +46,18 @@ gulp.task 'styles', ->
   .pipe gulp.dest 'bin/css'
   .pipe reload(stream: yes)
 
+gulp.task 'bower', ['bower_js', 'bower_css']
+
+gulp.task 'bower_js', ->
+  gulp.src(bower(filter: /\.js$/i))
+  .pipe concat('vendor.js')
+  .pipe gulp.dest 'bin/js'
+
+gulp.task 'bower_css', ->
+  gulp.src(bower(filter: /\.css$/i))
+  .pipe concat('vendor.css')
+  .pipe gulp.dest 'bin/css'
+
 gulp.task 'watch', ->
   gulp.watch('src/js/**/*.coffee', ['scripts'])
   gulp.watch('build/js/**/*.js', ['modules', reload])
@@ -57,4 +70,4 @@ gulp.task 'server', ->
     notify: true
 
 gulp.task 'default',
-  ['server', 'watch', 'scripts', 'templates', 'styles']
+  ['server', 'watch', 'scripts', 'templates', 'styles', 'bower']
