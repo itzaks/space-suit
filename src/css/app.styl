@@ -1,0 +1,30 @@
+@import 'nib'
+@import 'jeet'
+@import 'mixins'
+
+global-reset()
+
+yellow = #ffd800
+gray = #fafcff
+gray-light = #E0E0E0
+white-off = #F7F7F7
+site-width = 960px
+footer-height = 8em
+
+@import 'typography'
+@import 'animations'
+
+body, html
+  height: 100%
+
+body
+  background: #fafcff
+
+img, .has-bg-image
+  max-width: 100%
+
+.menu-item
+  display: inline-block
+
+@import 'layout'
+@import 'menu'

@@ -1,0 +1,116 @@
+edit()
+  *
+    background: #eee
+    background: rgba(#000, 5%)
+
+  .debug-grid
+    center(site-width)
+    fixed: top 0 bottom 0
+    left: 0
+    right: 0
+    pointer-events: none
+
+  .debug-grid div
+    col(1/6)
+    height: 100%
+    border: 1px solid rgba(115, 131, 255, 0.86)
+    box-sizing: border-box
+    border-top: 0
+    border-bottom: 0
+    background: transparent
+
+pseudo()
+  content: '\00a0'
+  display: block
+  height: 0px
+
+no-select()
+  user-select: none
+  cursor: default
+
+defaults(source, object)
+  for key, value in source
+    unless key in object
+      object[key] = value
+  return object
+
+square(size = 100%)
+  box-sizing: border-box
+  height: 1px
+  padding-bottom: size
+  width: size
+
+square-center-text()
+  square()
+  padding-bottom: 50%
+  padding-top: 50%
+  line-height: 0
+
+rect(scale)
+  box-sizing: border-box
+  height: 0
+  padding-bottom: scale
+  width: auto
+
+triangle(size, color)
+  pseudo()
+  absolute: left 0 right 0
+  bottom: 0
+  width: 0px
+  height: 0px
+  margin: 0 auto -(size)
+  border-style: solid
+  border-width: size size 0 size
+  border-color: color transparent transparent transparent
+
+circle()
+  square()
+  border-radius: 50%
+
+fa-icon(code = '')
+  font-family: FontAwesome
+  display: inline-block
+  content: unquote("'\" + code +"'")
+  padding: 0 0.5em
+
+background-size(arguments...)
+  background-size: arguments
+  -ms-behavior: url(/backgroundsize.min.htc)
+
+jagged-border(size = 35px, color1 = #000, color2 = #fff, pos = "bottom")
+  .is-lt-ie10 & {display: none}
+  content: ''
+  background: linear-gradient(-135deg, color1 (size / 2), transparent 0) 0 (size / 2), linear-gradient(135deg, color1 (size / 2), color2 0) 0 (size / 2)
+  background-color: color1
+  background-size: size size
+  background-position: 50% 100%
+  background-repeat: repeat-x
+  display: block
+  height: (size * 0.7625)
+  absolute: left 0 right 0
+  if pos is "top"
+    top: -(size * 0.7625)
+  else
+    bottom: -(size * 0.7625)
+
+absolute-corners()
+  position: absolute
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+
+size(width, height=false)
+  unless height
+    height = width
+  width: width
+  height: height
+
+stack-mobile()
+  stack()
+  margin-left: 0 !important
+  margin-right: 0 !important
+  width: 100% !important
+  float: none !important
+  clear: both !important
+  display: block !important
