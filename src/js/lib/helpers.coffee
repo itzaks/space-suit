@@ -1,5 +1,4 @@
 { $ } = require 'space-pen'
-lasso = require 'lasso-js'
 page = require 'page'
 
 do ->
@@ -17,7 +16,6 @@ do ->
       url = href.replace(/^\//,'').replace('\#\!\/','')
 
       # Instruct Backbone to trigger routing events
-      lasso.broadcast 'route', url
       page(url)
 
       return false

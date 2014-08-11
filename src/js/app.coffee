@@ -1,6 +1,4 @@
 { View, $$, $ } = require 'space-pen'
-lasso = require 'lasso-js'
-
 Page = require './page'
 Menu = require './menu'
 require './lib/helpers'

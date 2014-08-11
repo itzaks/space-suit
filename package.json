@@ -30,6 +30,8 @@
     "nib": "~1.0.3",
     "jeet": "~5.3.0",
     "lazypipe": "~0.2.2",
-    "gulp-plumber": "~0.6.4"
+    "gulp-plumber": "~0.6.4",
+    "coffee-script": "~1.7.1",
+    "gulp-notify": "~1.4.2"
   }
 }

@@ -1,1 +1,1 @@
-module.exports = ['space', 'je taime', 'mind']
+module.exports = ['space', 'time', 'mind']
