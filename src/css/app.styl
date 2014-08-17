@@ -8,23 +8,34 @@ yellow = #ffd800
 gray = #fafcff
 gray-light = #E0E0E0
 white-off = #F7F7F7
-site-width = 960px
-footer-height = 8em
+sidebar-width = 300px
+fonts = 'avenir', 'myriad pro', 'helvetica neue', 'helvetica', arial, sans-serif
 
 @import 'typography'
+@import 'form'
 @import 'animations'
 
 body, html
   height: 100%
 
+th, td
+  text-align: inherit
+  font-weight: inherit
+
 body
-  background: #fafcff
+  background: #101B2B
 
 img, .has-bg-image
   max-width: 100%
 
-.menu-item
-  display: inline-block
 
-@import 'layout'
-@import 'menu'
+.app //makes up for sidebar
+  padding-right: sidebar-width
+
+.is-hidden
+  display: none
+
+@import 'thumbs'
+@import 'lightbox'
+@import 'mail'
+@import 'sidebar'

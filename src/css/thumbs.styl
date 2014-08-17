@@ -1,0 +1,23 @@
+.thumb
+  col(1/4, cycle: 4)
+  border: 1px solid #e2e2e2
+  padding: 0.5em
+  box-sizing: border-box
+  cursor: pointer
+  position: relative
+
+.thumb:before
+  pseudo()
+  square()
+
+.thumb-image
+  transition: 200ms opacity
+  absolute: top 1em left 1em
+  right: 1em
+  bottom: 1em
+  background-size: contain;
+  background-position: 50%;
+  background-repeat: no-repeat;
+
+.thumb:hover .thumb-image
+  opacity: 0.7

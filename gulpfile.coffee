@@ -1,47 +1,41 @@
+fs                     = require 'fs'
 gulp                   = require 'gulp'
 gutil                  = require 'gulp-util'
 coffee                 = require 'gulp-coffee'
 stylus                 = require 'gulp-stylus'
 concat                 = require 'gulp-concat'
 notify                 = require 'gulp-notify'
-uglify                 = require 'gulp-uglify'
-browserify             = require 'gulp-browserify'
-sourcemaps             = require 'gulp-sourcemaps'
 jade                   = require 'gulp-jade'
 plumber                = require 'gulp-plumber'
 bower                  = require 'main-bower-files'
 lazypipe               = require 'lazypipe'
 nib                    = require 'nib'
 jeet                   = require 'jeet'
-del                    = require 'del'
+nodemon                = require 'nodemon'
 {reload} = browsersync = require 'browser-sync'
 
-onerror = lazypipe()
-  .pipe(plumber, errorHandler:
-    notify.onError "Error: <%= error.message %>"
-  )
+onerror = lazypipe().pipe(plumber, errorHandler:
+  notify.onError "Error: <%= error.message %>"
+)
 
-gulp.task 'templates', ->
-  gulp.src('src/**/*.jade')
-  .pipe onerror()
-  .pipe jade pretty: true
-  .pipe gulp.dest('bin/')
+gulp.task 'browserify', ->
+  bundler = browserify
+    cache: {}, packageCache: {}, fullPaths: true,
+    entries: ["./src/js/app.coffee"]
+    extensions: [ ".coffee", ".jade"]
+    debug: yes
 
-gulp.task 'scripts', ->
-  gulp.src('src/js/**/*.coffee')
-  .pipe onerror()
-  .pipe sourcemaps.init()
-  .pipe coffee()
-  .pipe gulp.dest('build/js')
+  bundler.transform(coffeeify).transform(jadeify)
 
-gulp.task 'modules', ->
-  gulp.src('build/js/*.js')
-  .pipe onerror()
-  .pipe browserify(debug: yes)
-  .pipe concat('app.js')
-  .pipe sourcemaps.write()
-  .pipe gulp.dest('bin/js')
-  .pipe notify('Wrote file file: <%= file.relative %>')
+  bundler = watchify(bundler)
+  bundler.on 'update', bundle = ->
+    bundler.bundle()
+    .pipe onerror()
+    .pipe source("app.js")
+    .pipe notify('Wrote file file: <%= file.relative %>')
+    .pipe reload(stream: yes)
+    .pipe gulp.dest("./bin/js")
+  bundle()
 
 gulp.task 'styles', ->
   gulp.src('src/css/app.styl')
@@ -50,10 +44,12 @@ gulp.task 'styles', ->
   .pipe gulp.dest 'bin/css'
   .pipe reload stream: yes
 
-gulp.task 'bower_js', ->
-  gulp.src bower(filter: /\.js$/i)
-  .pipe concat('vendor.js')
-  .pipe uglify()
+gulp.task 'vendor_scripts', ->
+  files = bower(filter: /\.js$/i)
+  files.push 'app/js/vendor/*.js'
+  gulp.src files
+  .pipe concat 'vendor.js'
+  .pipe notify 'Wrote file file: <%= file.relative %>'
   .pipe gulp.dest 'bin/js'
 
 gulp.task 'bower_css', ->
@@ -61,14 +57,32 @@ gulp.task 'bower_css', ->
   .pipe concat('vendor.css')
   .pipe gulp.dest 'bin/css'
 
-gulp.task 'watch', ->
-  gulp.watch('src/js/**/*.coffee', ['scripts'])
-  gulp.watch('build/js/**/*.js', ['modules', reload])
-  gulp.watch('src/**/*.jade', ['templates', reload])
-  gulp.watch('src/css/**/*.styl', ['styles'])
+gulp.task 'assets', ->
+  gulp.src(['src/assets/**/*', 'src/clients/**/*.png'])
+  .pipe gulp.dest 'bin/assets/'
 
-gulp.task 'clean', (cb) -> del ['build', 'bin'], cb
-gulp.task 'bower', ['bower_js', 'bower_css']
-gulp.task 'server', -> browsersync(server: 'bin/', notify: no)
-gulp.task 'client', ['bower', 'scripts', 'templates', 'styles']
-gulp.task 'default', ['clean', 'server', 'watch', 'client']
+gulp.task 'markup', ->
+  gulp.src('src/index.jade')
+  .pipe onerror()
+  .pipe jade pretty: true
+  .pipe gulp.dest('bin/')
+
+gulp.task 'watch', ['browserify'], ->
+  gulp.watch('src/assets/**/*', ['assets'])
+  gulp.watch('src/css/**/*.styl', ['styles'])
+  gulp.watch('src/index.jade', ['markup', reload])
+
+gulp.task 'nodemon', (next) ->
+  nodemon {script: 'server.coffee', watch: 'server.coffee'}
+  .on 'restart', -> reload()
+  .once 'start', -> setTimeout next, 500
+
+gulp.task 'server', ['nodemon'], ->
+  browsersync
+    notify: no
+    proxy: 'http://localhost:3001'
+    port: 3000
+
+gulp.task 'bower', ['vendor_scripts', 'bower_css']
+gulp.task 'app', ['styles', 'markup', 'assets']
+gulp.task 'default', ['server', 'watch', 'bower', 'app']

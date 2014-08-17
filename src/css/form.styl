@@ -1,0 +1,46 @@
+
+input, textarea
+  ui()
+  color: #111
+  background: #fff
+  font-size: 1em
+  padding: 0.8em 1em
+  border: 2px solid #CCC
+  border-radius: 2px
+  transition: border-color 200ms
+  font-family: fonts
+  margin-bottom: 1em
+
+input:hover, textarea:hover
+  border-color: #aaa
+
+input:focus, textarea:focus
+  outline: none
+  border-color: #000
+
+button
+  &:hover { opacity: 0.9 }
+  &:focus { outline: 0 }
+  ui()
+  width: 80%
+  font-family: fonts
+  font-weight: 400
+  text-transform: uppercase
+  border: 0
+  border-radius: 4px
+  border-top: 1px solid #45E0FF
+  box-shadow: 0 3px 0 #48B6CC
+  background: #86CCDA
+  color: #FFF
+  cursor: pointer
+  padding: 0.5em
+  margin: 0 auto 0.5em
+
+button:active
+  opacity: 1
+  background: darken(#86CCDA, 5%)
+
+label
+  text-transform: uppercase
+  font-size: 0.8em
+  margin-bottom: 0.5em
