@@ -76,12 +76,16 @@ gulp.task 'vendor_scripts', ->
   .pipe gulp.dest 'bin/js'
 
 gulp.task 'bower_css', ->
-  gulp.src(bower(filter: /\.css$/i))
+  files = bower(filter: /\.css$/i)
+  return unless files.length
+  gulp.src(files)
   .pipe concat('vendor.css')
   .pipe gulp.dest 'bin/css'
 
 gulp.task 'bower_assets', ->
-  gulp.src(bower(filter: /.*\.(?!js|css).*/i))
+  files = bower(filter: /.*\.(?!js|css).*/i)
+  return unless files.length
+  gulp.src(files)
   .pipe gulp.dest 'bin/'
 
 gulp.task 'copy_assets', ->
@@ -99,7 +103,7 @@ gulp.task 'markup', ->
 
 # Server watch
 gulp.task 'nodemon', (next) ->
-  nodemon script: 'server/index.coffee', watch: ['server/']
+  nodemon script: 'server.coffee', watch: ['server/']
   .on 'restart', -> console.log 'server:restarted'; reload()
   .once 'start', -> setTimeout next, 500
 
@@ -115,14 +119,10 @@ gulp.task 'watch_off', -> WATCH = off
 # Watch and build
 gulp.task 'watch', ['watch_on', 'browserify'], ->
   gulp.watch 'src/assets/**/*',       ['copy_assets',      reload]
-  gulp.watch 'src/clients/**/*.png',  ['copy_assets',      reload]
   gulp.watch 'src/index.jade',        ['markup',           reload]
-  gulp.watch 'src/clients/**/*.jade', ['client_templates', reload]
-  gulp.watch 'src/clients/**/*.styl', ['client_styles']
   gulp.watch 'src/css/**/*.styl',     ['styles']
 
-gulp.task 'client',   ['client_styles', 'client_templates']
 gulp.task 'bower',    ['vendor_scripts', 'bower_css', 'bower_assets']
 gulp.task 'app',      ['styles', 'markup', 'copy_assets']
-gulp.task 'build',    ['watch_off', 'browserify', 'bower', 'client', 'app']
-gulp.task 'default',  ['server', 'watch', 'bower', 'client', 'app']
+gulp.task 'build',    ['watch_off', 'browserify', 'bower', 'app']
+gulp.task 'default',  ['server', 'watch', 'bower', 'app']
