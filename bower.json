@@ -4,5 +4,7 @@
   "description": "",
   "keywords": [],
   "dependencies": {
+    "spin.js": "~2.0.1",
+    "imagesloaded": "~3.1.8"
   }
 }
