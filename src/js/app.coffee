@@ -1,13 +1,17 @@
 { View, $ } = require 'space-pen'
 window.$ = window.jQuery = $
-Mail = require './mail'
-Sidebar = require './sidebar'
 
 class App extends View
   @content: (params) ->
     @div class: 'app', =>
-      @subview 'mail', new Mail()
-      @subview 'sidebar', new Sidebar()
+      @h1 '-> click <-', click: 'change_face'
+      @h2 ':–)', outlet: 'smile'
+
+  change_face: ->
+    smile = [':–(', ':-o', '>:–)', ';––)', ':-)']
+    pick = Math.round (Math.random() * smile.length)
+    
+    @smile.text smile[pick]
 
 $ ->
   $ 'body'

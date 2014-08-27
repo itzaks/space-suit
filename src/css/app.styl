@@ -14,9 +14,7 @@ fonts = 'avenir', 'myriad pro', 'helvetica neue', 'helvetica', arial, sans-serif
 @import 'typography'
 @import 'form'
 @import 'animations'
-
-body, html
-  height: 100%
+@import 'lightbox'
 
 th, td
   text-align: inherit
@@ -24,18 +22,18 @@ th, td
 
 body
   background: #101B2B
+  color: #fff
 
-img, .has-bg-image
-  max-width: 100%
+h1
+  &:active { color: #ccc }
+  no-select()
+  font-size: 5em
+  margin-top: 2em
+  cursor: pointer
 
-
-.app //makes up for sidebar
-  padding-right: sidebar-width
+h2
+  font-size: 3em
+  font-weight: 800
 
 .is-hidden
   display: none
-
-@import 'thumbs'
-@import 'lightbox'
-@import 'mail'
-@import 'sidebar'
